@@ -167,7 +167,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 }
 ```
 
-Define the `User` provider in `src/Security/UserProvider.php`:
+Define the `UserProvider` in `src/Security/UserProvider.php`:
 
 ```php
 <?php
