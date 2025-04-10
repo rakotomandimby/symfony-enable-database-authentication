@@ -96,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
   }
 
-  public function eraseCredentials()
+  public function eraseCredentials():void
   {
   }
 
@@ -333,6 +333,14 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+```
+
+Declare the `/api/login` route in `config/routes/security.yaml`:
+```yaml
+### ... other routes ###
+api_login:
+    path: /api/login
+    methods: [POST]
 ```
 
 Generate JWT keys:
