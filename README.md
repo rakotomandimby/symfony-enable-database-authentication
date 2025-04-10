@@ -1,4 +1,4 @@
-# Setup a Symfony project with authentication against a database
+# Enable Symfony authentication against database
 
 **Note**: Database here is a PostgreSQL database.
 
