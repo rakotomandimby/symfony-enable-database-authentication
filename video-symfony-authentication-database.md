@@ -82,7 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   {
   }
 
-public function getUserIdentifier(): string
+  public function getUserIdentifier(): string
   {
     return $this->email;
   }
@@ -226,16 +226,11 @@ class UserRepository
 
     try {
         $this->conn = new \PDO($dsn, $username, $password);
-        // Set PDO to throw exceptions on error, useful for debugging
         $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\PDOException $e) {
-        // Handle connection error appropriately
-        // For example, log the error and throw a more generic exception
-        // error_log("Database Connection Error: " . $e->getMessage());
         throw new \RuntimeException("Could not connect to the database.");
     }
   }
-
 
   public function findOneByEmail(string $email): ?User
   {
@@ -261,7 +256,6 @@ class UserRepository
   {
     return $this->findOneByEmail($username);
   }
-
 }
 ```
 
@@ -335,7 +329,6 @@ Create a controller to check the authentication in `src/Controller/TestAuthContr
 
 ```php
 <?php
-// TestAuthController.php
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -362,3 +355,5 @@ class TestAuthController extends AbstractController
     return $this->json(['message' => 'Not authenticated'], 401);
   }
 }
+```
+
