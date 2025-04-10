@@ -295,7 +295,6 @@ Configure the security in `config/packages/security.yaml`:
 
 ```yaml
 security:
-    enable_authenticator_manager: true
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     providers:
@@ -336,6 +335,9 @@ when@test:
 ```
 
 Declare the `/api/login` route in `config/routes/security.yaml`:
+
+**Note** : Here, we append the new content to the existing `security.yaml` file.
+
 ```yaml
 ### ... other routes ###
 api_login:
