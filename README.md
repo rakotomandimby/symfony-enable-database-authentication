@@ -15,6 +15,24 @@ CREATE TABLE public.users (
 );
 ```
 
+Create the user:
+```sql
+INSERT INTO public.users (
+    email, 
+    password, 
+    first_name, 
+    last_name, 
+    roles) 
+VALUES (
+    'mr@rktmb.org', 
+    '$2a$12$AbZtZJCEB8qnu2ZCAcQIE.4wOlO1RM4H7eec8y4Fmaehtvrwu9SaW', 
+    'Miha', 
+    'RKTMB', 
+    'ROLE_ADMIN,ROLE_USER');
+```
+
+The password is `mihamina` hashed with any [online bcrypt generator](https://www.google.com/search?client=firefox-b-d&q=bcrypt+online)
+
 Create a Symfony project:
 
 ```bash
