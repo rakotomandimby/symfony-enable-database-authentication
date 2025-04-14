@@ -6,12 +6,12 @@ Setup the database and create a user in the database.
 
 ```sql
 CREATE TABLE public.users (
-    id serial NOT NULL,
-    email character varying(255) NOT NULL,
-    password character varying(255) NOT NULL,
-    first_name character varying(512),
-    last_name character varying(512),
-    roles character varying(1024)
+    id SERIAL NOT NULL,
+    email CHARACTER VARYING(255) NOT NULL,
+    password CHARACTER VARYING(255) NOT NULL,
+    first_name CHARACTER VARYING(512),
+    last_name CHARACTER VARYING(512),
+    roles CHARACTER VARYING(1024)
 );
 ```
 
