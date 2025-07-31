@@ -201,7 +201,7 @@ class UserProvider implements UserProviderInterface
 
   public function refreshUser(UserInterface $user): UserInterface
   {
-    /** @var App\Entory\User|null $user */
+    /** @var App\Entity\User|null $user */
     return $this->loadUserByIdentifier($user->getEmail());
   }
 
@@ -368,7 +368,7 @@ class TestAuthController extends AbstractController
   #[Route('/api/test/auth', name: 'api_test_auth')]
   public function testAuth(): Response
   {
-    /** @var App\Entory\User|null $user */
+    /** @var App\Entity\User|null $user */
     $user = $this->getUser();
     
     if ($user) {
@@ -385,3 +385,15 @@ class TestAuthController extends AbstractController
 }
 ```
 
+## Testing the API
+
+When making a `POST` request to the `/api/login` endpoint to authenticate, you **must** include the `Content-Type: application/json` header.
+
+If this header is omitted, Symfony's `json_login` listener will not be triggered to handle the credentials. The request will fall through to the next security layer, the JWT authenticator, which will fail because no token is present. This results in a `401 Unauthorized` response with a "JWT Token not found" error message.
+
+Here is an example of a correct login request using `curl`:
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "mr@rktmb.org", "password": "mihamina"}'
