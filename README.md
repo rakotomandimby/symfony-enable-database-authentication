@@ -224,30 +224,41 @@ class UserRepository
 {
   private \PDO $conn;
 
-  public function __construct(string $databaseUrl)
+  /**
+   * Maps standard URL schemes to PHP's PDO driver names.
+   */
+  private const SCHEME_TO_DRIVER_MAP = [
+      'postgresql' => 'pgsql',
+      'mysql' => 'mysql',
+  ];
+
+  public function __construct()
   {
-    $parsedUrl = parse_url($databaseUrl);
+      $dbUrl = getenv('DATABASE_URL');
+      if ($dbUrl === false) {
+          throw new \RuntimeException('DATABASE_URL environment variable is not set.');
+      }
 
-    if ($parsedUrl === false || !isset($parsedUrl['scheme'], $parsedUrl['host'], $parsedUrl['user'], $parsedUrl['pass'], $parsedUrl['path'])) {
-        throw new \InvalidArgumentException("Invalid database URL format.");
-    }
+      $db = parse_url($dbUrl);
+      if ($db === false || !isset($db['scheme'])) {
+          throw new \RuntimeException('Could not parse DATABASE_URL.');
+      }
 
-    $driver = $parsedUrl['scheme']; // e.g., 'pgsql'
-    $host = $parsedUrl['host'];
-    $port = $parsedUrl['port'] ?? 5432; // Default PostgreSQL port
-    $dbname = ltrim($parsedUrl['path'], '/'); // Remove leading slash from path
-    $username = $parsedUrl['user'];
-    $password = $parsedUrl['pass'];
+      $driver = self::SCHEME_TO_DRIVER_MAP[$db['scheme']] ?? null;
+      if ($driver === null) {
+          throw new \RuntimeException("Unsupported database driver: {$db['scheme']}");
+      }
 
-    // Construct the DSN string for PDO
-    $dsn = sprintf('%s:host=%s;port=%d;dbname=%s', $driver, $host, $port, $dbname);
+      $host = $db['host'];
+      $port = $db['port'];
+      $user = $db['user'];
+      $pass = $db['pass'];
+      $dbname = ltrim($db['path'], '/');
 
-    try {
-        $this->conn = new \PDO($dsn, $username, $password);
-        $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    } catch (\PDOException $e) {
-        throw new \RuntimeException("Could not connect to the database.");
-    }
+      $dsn = "{$driver}:host={$host};port={$port};dbname={$dbname}";
+
+      $this->conn = new \PDO($dsn, $user, $pass);
+      $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
   }
 
   public function findOneByEmail(string $email): ?User
